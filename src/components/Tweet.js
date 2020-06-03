@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { formatTweet, formatDate } from '../utils/helpers'
 import { TiArrowBackOutline, TiHeartOutline, TiHeartFullOutline} from 'react-icons/ti/index'
 import { handleToggleTweet } from '../actions/tweets'
+import { Link, withRouter } from 'react-router-dom'
 
 class Tweet extends Component {
     handleLike = (e) => {
@@ -19,7 +20,7 @@ class Tweet extends Component {
 
     toParent = (e, id) => {
         e.preventDefault()
-        // TODO: redirect to parent tweet
+        this.props.history.push(`/tweet/${id}`)
     }
 
     render() {
@@ -29,10 +30,10 @@ class Tweet extends Component {
            return <p>This tweet doesn't exist</p>
        }
 
-       const { name, avatar, timestamp, text, hasLiked, likes, replies, parent } = tweet
+       const { name, avatar, timestamp, text, hasLiked, likes, replies, id, parent } = tweet
         
         return(
-            <div className='tweet'>
+            <Link to={`/tweet/${id}`} className='tweet'>
                 <img
                 src={avatar}
                 alt={`Avatar of ${name}`}
@@ -60,7 +61,7 @@ class Tweet extends Component {
                     <span>{likes !== 0 && likes}</span>
                 </div>
                 </div>
-            </div>
+            </Link>
         )
     }
 }
@@ -75,4 +76,4 @@ function mapStateToProps({ authedUser, users, tweets }, { id }) {
     }
 }
 
-export default connect(mapStateToProps)(Tweet)
+export default withRouter(connect(mapStateToProps)(Tweet))
